@@ -1,0 +1,259 @@
+/* Navbar Styles */
+.navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Hamburger Menu Styles */
+.hamburger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    order: 1;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 2px;
+    background-color: #333;
+    transition: all 0.3s ease;
+}
+
+/* Search Section Styles */
+.search-section {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+    order: 2;
+}
+
+.search-group {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 500px;
+    width: 100%;
+}
+
+.search-input {
+    flex-grow: 1;
+    padding: 0.6rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.search-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .search-group {
+        max-width: 100%;
+        order: 3;
+        flex: 1 0 100%;
+    }
+    
+    .search-input {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .search-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .search-button span {
+        display: none;
+    }
+    
+    .search-button::after {
+        content: "🔍";
+        display: inline-block;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+    
+    .hamburger {
+        padding: 0.25rem;
+    }
+    
+    .hamburger span {
+        width: 20px;
+        height: 2px;
+    }
+    
+    .search-button {
+        padding: 0.5rem;
+        min-width: 40px;
+    }
+}
+
+/* Tambahkan ini ke CSS */
+.nav-links {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    height: 100vh;
+    width: 250px;
+    background: #fff;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.nav-links.active {
+    left: 0;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Backdrop overlay */
+.nav-links::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: calc(100% - 250px);
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    display: none;
+}
+
+.nav-links.active::before {
+    display: block;
+}
+
+@media (min-width: 769px) {
+    .nav-links {
+        position: static;
+        height: auto;
+        width: auto;
+        background: none;
+        box-shadow: none;
+        padding: 0;
+        display: flex;
+        gap: 1.5rem;
+    }
+    
+    .hamburger {
+        display: none;
+    }
+}
+
+.nav-item {
+    display: block;
+    padding: 12px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    background: #f5f5f5;
+    color: #4CAF50;
+}
+
+@media (min-width: 769px) {
+    .nav-item {
+        padding: 8px 12px;
+    }
+}
+
+/* Perbaikan CSS */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+.nav-links.active + .menu-overlay {
+    display: block;
+}
+
+.nav-links {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    height: 100vh;
+    width: 250px;
+    background: #fff;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    padding: 60px 20px 20px 20px; /* Tambahkan padding atas untuk hamburger */
+}
+
+.close-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .close-menu {
+        display: block;
+    }
+}
