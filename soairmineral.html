@@ -1,1 +1,212 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Opname Serah Terima Shift</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .qty-display {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #0d6efd;
+    }
+    .badge-custom {
+      width: 100%;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50px; /* Bentuk oval */
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .card {
+      border-left: 4px solid #198754; /* Warna card seperti toast */
+      background-color: #f8fff8; /* Background card mirip toast */
+      padding: 1rem; /* Padding lebih kecil */
+    }
+    .card-body {
+      padding: 0.75rem; /* Padding lebih kecil */
+    }
+    .secondary-toast {
+      border: 1px solid #6c757d; /* Border secondary */
+      border-left: 4px solid #6c757d; /* Border kiri secondary */
+      background-color: #e2e3e5; /* Background secondary muda */
+    }
+    .toast-header {
+      background-color: #e2e3e5; /* Background header toast */
+      color: #343a40; /* Warna teks header toast */
+    }
+    .toast-icon {
+      font-size: 1.5rem;
+      margin-right: 0.75rem;
+      color: #6c757d; /* Ikon berwarna secondary */
+    }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .search-bar input {
+      flex-grow: 1;
+      font-size: 0.9rem;
+    }
+    .search-bar i {
+      font-size: 1.2rem;
+      color: #0d6efd;
+    }
+    .product-description {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <!-- Header -->
+  <header class="bg-primary text-white py-3">
+    <div class="container">
+      <h1 class="text-center mb-0">Stock Opname Serah Terima Shift</h1>
+    </div>
+  </header>
+
+  <div class="container py-4">
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" class="form-control" placeholder="Cari produk...">
+    </div>
+
+    <div class="card shadow mt-3">
+      <div class="card-body">
+        <!-- 1. Rak, PLU, Barcode -->
+        <div class="row g-2 mb-3">
+          <div class="col">
+            <span class="badge bg-primary badge-custom">Rak: A12-3</span>
+          </div>
+          <div class="col">
+            <span class="badge bg-success badge-custom">PLU: 00123</span>
+          </div>
+          <div class="col">
+            <span class="badge bg-warning text-dark badge-custom">Barcode: 123456789</span>
+          </div>
+        </div>
+
+        <!-- 2. Deskripsi dan Qty -->
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <div class="flex-grow-1 me-3">
+            <p class="product-description mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+          </div>
+          <div class="qty-display text-nowrap">
+            Qty: <span id="qty">0</span>
+          </div>
+        </div>
+
+        <!-- 3. Form Input -->
+        <div class="d-flex gap-2 mb-3">
+          <button class="btn btn-danger flex-shrink-0" onclick="resetData()">
+            Reset
+          </button>
+          <input type="number" 
+                 id="inputQty" 
+                 class="form-control" 
+                 placeholder="Masukkan jumlah"
+                 min="0">
+          <button class="btn btn-success flex-shrink-0" onclick="saveData()">
+            Simpan
+          </button>
+        </div>
+
+        <!-- 4. Timestamp -->
+        <div class="text-end">
+          <small class="text-muted" id="timestamp"></small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+    <div id="liveToast" class="toast secondary-toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <strong class="me-auto">Berhasil!</strong>
+        <small class="text-muted" id="toast-time"></small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        <span class="text-secondary"><span id="saved-qty">0</span> item berhasil ditambahkan!</span>
+        <p class="mb-0 text-muted small">Stok telah diperbarui</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and Popper.js -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let totalQty = 0;
+    const toastLiveExample = document.getElementById('liveToast');
+    const toastBootstrap = new bootstrap.Toast(toastLiveExample);
+
+    // Fungsi untuk memperbarui timestamp
+    function updateTimestamp() {
+      const now = new Date();
+      document.getElementById('timestamp').textContent = 
+        `Terakhir diperbarui: ${now.toLocaleString('id-ID')}`;
+    }
+
+    // Fungsi untuk menyimpan data
+    function saveData() {
+      const input = document.getElementById('inputQty');
+      const value = parseInt(input.value) || 0;
+
+      if (value > 0) {
+        totalQty += value;
+        document.getElementById('qty').textContent = totalQty;
+
+        // Update isi toast
+        document.getElementById('saved-qty').textContent = value;
+        const now = new Date();
+        document.getElementById('toast-time').textContent = 
+          now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+        // Kosongkan input dan perbarui timestamp
+        input.value = '';
+        updateTimestamp();
+
+        // Tampilkan toast
+        toastBootstrap.show();
+      }
+    }
+
+    // Fungsi untuk mereset data
+    function resetData() {
+      totalQty = 0;
+      document.getElementById('qty').textContent = totalQty;
+      document.getElementById('inputQty').value = '';
+      updateTimestamp();
+    }
+
+    // Inisialisasi timestamp saat halaman dimuat
+    window.onload = updateTimestamp;
+
+    // Filter card berdasarkan input pencarian
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const query = this.value.toLowerCase();
+      const description = document.querySelector('.product-description');
+      const card = document.querySelector('.card');
+
+      if (description.textContent.toLowerCase().includes(query)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
